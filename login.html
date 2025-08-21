@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela de Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+  <main>
+    <!-- Lado esquerdo -->
+    <div class="container__logo">
+      <div class="box__logo">
+        <img src="images/Lume.png" alt="Logo" class="logo">
+        <h2>LUMIERE</h2>
+      </div>
+      <a href="index.html">Cadastrar</a>
+    </div>
+
+    <!-- Lado direito -->
+    <div class="container__form">
+      <h1>Login</h1>
+
+      <div class="form">
+        <div class="caixaInputs">
+          <label>Login
+            <div class="input-container">
+              <i class="fas fa-id-badge"></i>
+              <input type="text" placeholder="Digite seu login" id="login" required>
+            </div>
+            <span class="erro" id="erroLogin"></span>
+          </label>
+
+          <label>Senha
+            <div class="senha-container input-container">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Digite sua senha" id="senha" required>
+              <span class="mostrarSenha"><i class="fas fa-eye"></i></span>
+            </div>
+            <span class="erro" id="erroSenha"></span>
+          </label>
+        </div>
+      </div>
+
+      <button id="botaoEnviar">Entrar</button>
+      <p class="mensagem-status"></p>
+    </div>
+  </main>
+
+  <script>
+    $(document).ready(function () {
+      // Mostrar/ocultar senha
+      $(".mostrarSenha").click(function () {
+        const input = $(this).siblings("input");
+        const icon = $(this).find("i");
+        if (input.attr("type") === "password") {
+          input.attr("type", "text");
+          icon.removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+          input.attr("type", "password");
+          icon.removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+      });
+
+      // Validação simples
+      function validarFormulario() {
+        let valido = true;
+        $(".erro").text("");
+
+        const login = $("#login").val().trim();
+        const senha = $("#senha").val().trim();
+
+        if (login === "") {
+          $("#erroLogin").text("Por favor, insira seu login.");
+          valido = false;
+        }
+        if (senha === "") {
+          $("#erroSenha").text("Por favor, insira sua senha.");
+          valido = false;
+        }
+
+        return valido;
+      }
+
+      $("#botaoEnviar").click(function () {
+        var login = $("#login").val();
+        var senha = $("#senha").val();
+        if (validarFormulario()) {
+          $.ajax({
+            url: "login.php",
+            type: "POST",
+            data: {
+              login: $("#login").val(),
+              senha: $("#senha").val()
+            },
+            dataType: "text"
+          }).done(function (resposta) {
+            if (resposta.trim() === "sucesso") {
+              $("p.mensagem-status").css("color", "green").html("Login realizado com sucesso!");
+              window.location.href = "home.php";
+            } else {
+              $("p.mensagem-status").css("color", "red").html("Login ou senha inválidos!");
+            }
+          }).fail(function () {
+            $("p.mensagem-status").css("color", "red").html("Erro ao conectar ao servidor.");
+          });
+
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>

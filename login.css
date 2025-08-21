@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Sora", sans-serif;
+}
+
+body {
+  background-color: #CCD4D9;
+  width: 100dvw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  width: 70%;
+  height: 85%;
+  background-color: #FFFAFA;
+  border-radius: 12px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Lado esquerdo */
+.container__logo {
+  background-color: #123d70;
+  width: 60%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.box__logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.box__logo h2 {
+  color: #FFFAFA;
+  font-size: 42px;
+}
+
+.container__logo a {
+  text-decoration: none;
+  padding: 12px 50px;
+  background-color: #FFFAFA;
+  border-radius: 8px;
+  color: #123d70;
+  font-weight: 700;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.container__logo a:hover {
+  background-color: #eee;
+}
+
+.logo {
+  height: 500px;
+  width: 600px;
+  object-fit: contain;
+}
+
+/* Lado direito */
+.container__form {
+  width: 40%;
+  padding: 50px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+h1 {
+  color: #123d70;
+  font-size: 32px;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.caixaInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  width: 100%;
+}
+
+.caixaInputs label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #123d70;
+  gap: 8px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-container i {
+  position: absolute;
+  left: 12px;
+  color: #123d70;
+  font-size: 16px;
+}
+
+.input-container input {
+  padding: 14px 45px 14px 38px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+  width: 100%;
+  font-size: 15px;
+}
+
+.input-container input:focus {
+  border-color: #123d70;
+  box-shadow: 0 0 6px rgba(18, 61, 112, 0.25);
+}
+
+.erro {
+  color: red;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.foto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.foto-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #123d70;
+  border: 2px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.foto-icon i {
+  font-size: 40px;
+  color: #f0f0f0;
+}
+
+.foto-icon:hover {
+  background-color: #e0e0e0;
+}
+
+.foto-icon.with-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.foto-texto {
+  font-size: 13px;
+  margin-top: 5px;
+  color: #666;
+}
+
+
+.senha-container input {
+  padding-right: 48px;
+}
+
+
+.senha-container .mostrarSenha {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.input-container .mostrarSenha i {
+  position: static;
+  left: auto;
+}
+
+.forca-senha {
+  width: 100%;
+  height: 8px;
+  background-color: #ddd;
+  border-radius: 4px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.barra {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #123d70;
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #0e2f55;
+}
+
+.mensagem-status {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mensagem-sucesso {
+  color: green;
+}
+
+.mensagem-erro {
+  color: red;
+}
