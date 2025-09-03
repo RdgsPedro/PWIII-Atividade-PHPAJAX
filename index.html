@@ -4,258 +4,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela de Cadastro</title>
+  <title>Tela de Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
 </head>
 
 <body>
-    <main>
-        <div class="container__logo">
-            <div class="box__logo">
-                <img src="images/Lume.png" alt="Logo" class="logo">
-                <h2>LUMIERE</h2>
+  <main>
+    <div class="container__logo">
+      <div class="box__logo">
+        <img src="images/Lume.png" alt="Logo" class="logo">
+        <h2>LUMIERE</h2>
+      </div>
+    </div>
+
+
+    <div class="container__form">
+      <h1>Login</h1>
+
+      <div class="form">
+        <div class="caixaInputs">
+          <label>Login
+            <div class="input-container">
+              <i class="fas fa-id-badge"></i>
+              <input type="text" placeholder="Digite seu login" id="login" required>
             </div>
-            <a href="login.html">Login</a>
-        </div>
+            <span class="erro" id="erroLogin"></span>
+          </label>
 
-        <div class="container__form">
-            <h1>Cadastro</h1>
-
-            <div class="form">
-                <div class="foto">
-                    <label for="imagemInput" class="fotoLabel">
-                        <div id="imagemPreview" class="foto-icon">
-                            <i class="fas fa-plus"></i>
-                        </div>
-                    </label>
-                    <input type="file" id="imagemInput" accept="image/*" style="display: none;">
-                    <p class="foto-texto">Clique para adicionar uma foto</p>
-                </div>
-
-                <div class="caixaInputs">
-                    <div class="linha">
-                        <label>Nome
-                            <div class="input-container">
-                                <i class="fas fa-user"></i>
-                                <input type="text" placeholder="Digite seu nome" id="nome" required>
-                            </div>
-                            <span class="erro" id="erroNome"></span>
-                        </label>
-
-                        <label>Login
-                            <div class="input-container">
-                                <i class="fas fa-id-badge"></i>
-                                <input type="text" placeholder="Digite seu login" id="login" required>
-                            </div>
-                            <span class="erro" id="erroLogin"></span>
-                        </label>
-                    </div>
-
-                    <div class="linha">
-                        <label>E-mail
-                            <div class="input-container">
-                                <i class="fas fa-envelope"></i>
-                                <input type="email" placeholder="Digite seu e-mail" id="email" required>
-                            </div>
-                            <span class="erro" id="erroEmail"></span>
-                        </label>
-
-                        <label>Telefone
-                            <div class="input-container">
-                                <i class="fas fa-phone"></i>
-                                <input type="tel" placeholder="(00) 00000-0000" id="telefone" required>
-                            </div>
-                            <span class="erro" id="erroTelefone"></span>
-                        </label>
-                    </div>
-
-                    <div class="linha">
-                        <label>Senha
-                            <div class="senha-container input-container">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" placeholder="Digite sua senha" id="senha" required>
-                                <span class="mostrarSenha"><i class="fas fa-eye"></i></span>
-                            </div>
-                            <span class="erro" id="erroSenha"></span>
-                            <div class="forca-senha">
-                                <div id="barraForcaSenha" class="barra"></div>
-                            </div>
-                        </label>
-
-                        <label>Confirmar senha
-                            <div class="senha-container input-container">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" placeholder="Confirme sua senha" id="confirmarSenha" required>
-                                <span class="mostrarSenha"><i class="fas fa-eye"></i></span>
-                            </div>
-                            <span class="erro" id="erroConfirmarSenha"></span>
-                            <div class="forca-senha">
-                                <div id="barraForcaConfirmar" class="barra"></div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
+          <label>Senha
+            <div class="senha-container input-container">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Digite sua senha" id="senha" required>
+              <span class="mostrarSenha"><i class="fas fa-eye"></i></span>
             </div>
-
-            <button id="botaoEnviar">Cadastrar</button>
-            <p class="mensagem-status"></p>
+            <span class="erro" id="erroSenha"></span>
+          </label>
         </div>
-    </main>
+      </div>
 
-    <script>
-        $(document).ready(function () {
-            // Preview da foto
-            $("#imagemInput").change(function () {
-                if (this.files && this.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#imagemPreview').html('<img src="' + e.target.result + '" alt="Preview da foto">');
-                        $('#imagemPreview').addClass('with-image');
-                        $('.foto-texto').text('Foto adicionada com sucesso!');
-                    }
-                    reader.readAsDataURL(this.files[0]);
-                }
-            });
+      <button id="botaoEnviar">Entrar</button>
+      <p class="mensagem-status"></p>
+    </div>
+  </main>
 
-            // Mostrar/ocultar senha
-            $(".mostrarSenha").click(function () {
-                const input = $(this).siblings("input");
-                const icon = $(this).find("i");
-                if (input.attr("type") === "password") {
-                    input.attr("type", "text");
-                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
-                } else {
-                    input.attr("type", "password");
-                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
-                }
-            });
+  <script>
+    $(document).ready(function () {
+      $(".mostrarSenha").click(function () {
+        const input = $(this).siblings("input");
+        const icon = $(this).find("i");
+        if (input.attr("type") === "password") {
+          input.attr("type", "text");
+          icon.removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+          input.attr("type", "password");
+          icon.removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+      });
+      
+      function validarFormulario() {
+        let valido = true;
+        $(".erro").text("");
 
-            // Função para calcular força da senha
-            function calcularForca(senha) {
-                let forca = 0;
-                if (senha.length >= 8) forca += 20;
-                if (/[A-Z]/.test(senha)) forca += 20;
-                if (/[a-z]/.test(senha)) forca += 20;
-                if (/[0-9]/.test(senha)) forca += 20;
-                if (/[!@#$%^&*(),.?":{}|<>]/.test(senha)) forca += 20;
-                return forca;
+        const login = $("#login").val().trim();
+        const senha = $("#senha").val().trim();
+
+        if (login === "") {
+          $("#erroLogin").text("Por favor, insira seu login.");
+          valido = false;
+        }
+        if (senha === "") {
+          $("#erroSenha").text("Por favor, insira sua senha.");
+          valido = false;
+        }
+
+        return valido;
+      }
+
+      $("#botaoEnviar").click(function () {
+        var login = $("#login").val();
+        var senha = $("#senha").val();
+        if (validarFormulario()) {
+          $.ajax({
+            url: "login.php",
+            type: "POST",
+            data: {
+              login: $("#login").val(),
+              senha: $("#senha").val()
+            },
+            dataType: "text"
+          }).done(function (resposta) {
+            if (resposta.trim() === "sucesso") {
+              $("p.mensagem-status").css("color", "green").html("Login realizado com sucesso!");
+              window.location.href = "home.php";
+            } else {
+              $("p.mensagem-status").css("color", "red").html("Login ou senha inválidos!");
             }
+          }).fail(function () {
+            $("p.mensagem-status").css("color", "red").html("Erro ao conectar ao servidor.");
+          });
 
-            function atualizarBarra(barra, forca) {
-                barra.css("width", forca + "%");
-                if (forca < 40) barra.css("background-color", "red");
-                else if (forca < 80) barra.css("background-color", "orange");
-                else barra.css("background-color", "green");
-            }
+        }
+      });
 
-            // Força da senha principal
-            $("#senha").on("input", function () {
-                const senha = $(this).val();
-                atualizarBarra($("#barraForcaSenha"), calcularForca(senha));
-            });
-
-            // Força do confirmar senha
-            $("#confirmarSenha").on("input", function () {
-                const senha = $(this).val();
-                atualizarBarra($("#barraForcaConfirmar"), calcularForca(senha));
-            });
-
-            // Máscara de telefone
-            $("#telefone").on("input", function () {
-                let value = $(this).val().replace(/\D/g, '');
-                if (value.length > 2) {
-                    value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
-                }
-                if (value.length > 10) {
-                    value = `${value.substring(0, 10)}-${value.substring(10, 14)}`;
-                }
-                $(this).val(value);
-            });
-
-            // Função de validação
-            function validarFormulario() {
-                let valido = true;
-                $(".erro").text("");
-
-                const nome = $("#nome").val().trim();
-                if (nome === "") {
-                    $("#erroNome").text("Por favor, insira seu nome.");
-                    valido = false;
-                }
-
-                const login = $("#login").val().trim();
-                if (login === "") {
-                    $("#erroLogin").text("Por favor, insira seu login.");
-                    valido = false;
-                }
-
-                const email = $("#email").val().trim();
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    $("#erroEmail").text("E-mail inválido.");
-                    valido = false;
-                }
-
-                const telefone = $("#telefone").val().replace(/\D/g, '');
-                if (telefone.length < 10) {
-                    $("#erroTelefone").text("Telefone inválido.");
-                    valido = false;
-                }
-
-                const senha = $("#senha").val();
-                const confirmarSenha = $("#confirmarSenha").val();
-                if (senha !== confirmarSenha || senha.length === 0) {
-                    $("#erroConfirmarSenha").text("As senhas não coincidem ou estão vazias.");
-                    valido = false;
-                }
-
-                return valido;
-            }
-
-            // Evento de clique unificado para o botão "Cadastrar"
-            $("#botaoEnviar").click(function (e) {
-                e.preventDefault();
-
-                const mensagemStatus = $(".mensagem-status");
-                mensagemStatus.text("");
-                mensagemStatus.removeClass("mensagem-sucesso mensagem-erro");
-
-                if (validarFormulario()) {
-                    const nome = $("#nome").val();
-                    const login = $("#login").val();
-                    const email = $("#email").val();
-                    const telefone = $("#telefone").val();
-                    const senha = $("#senha").val();
-                    const foto = ""; // Você pode ajustar isso se for enviar a foto de fato
-
-                    $.ajax({
-                        url: "cadastro.php",
-                        type: "POST",
-                        data: {
-                            campo1: nome,
-                            campo2: login,
-                            campo3: senha,
-                            campo4: email,
-                            campo5: telefone,
-                            campo6: foto
-                        },
-                        dataType: "html"
-                    }).done(function (resposta) {
-                        mensagemStatus.text("Cadastro realizado com sucesso! Redirecionando...");
-                        mensagemStatus.addClass("mensagem-sucesso");
-                        setTimeout(() => {
-                            window.location.href = "login.html";
-                        }, 2000);
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log("Request failed: " + textStatus + " - " + errorThrown);
-                        mensagemStatus.text("Erro ao enviar dados. Tente novamente.");
-                        mensagemStatus.addClass("mensagem-erro");
-                    });
-                }
-            });
-        });
-    </script>
+    });
+  </script>
 </body>
+
 </html>

@@ -11,4 +11,6 @@ telefone varchar(17) not null,
 foto varchar(250) null
 );
 
+Insert into tb_contato values (null, 'administrador', 'admin', '@Admin01', 'admin@gmail.com', '11111111111', 'https://cdn-icons-png.freepik.com/512/64/64572.png');
+
 SELECT * FROM tb_contato;
