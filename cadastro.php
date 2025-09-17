@@ -1,7 +1,6 @@
 <?php
 include 'conecta.php';
 
-// Cria a pasta se não existir
 $uploadDir = "uploads/";
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0777, true);
@@ -14,7 +13,6 @@ $email = $_POST['campo4'];
 $telefone = $_POST['campo5'];
 $foto = "";
 
-// Se veio arquivo
 if (isset($_FILES['campo6']) && $_FILES['campo6']['error'] === UPLOAD_ERR_OK) {
     $ext = pathinfo($_FILES['campo6']['name'], PATHINFO_EXTENSION);
     $novoNome = uniqid("foto_") . "." . $ext;

@@ -8,7 +8,7 @@ $senha = $_POST['campo3'];
 $email = $_POST['campo4'];
 $telefone = $_POST['campo5'];
 
-$foto = $_POST['foto_atual']; 
+$foto = $_POST['foto_atual'];
 
 if (isset($_FILES['campo6']) && $_FILES['campo6']['error'] === UPLOAD_ERR_OK) {
     $extensao = pathinfo($_FILES['campo6']['name'], PATHINFO_EXTENSION);

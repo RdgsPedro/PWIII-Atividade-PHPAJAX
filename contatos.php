@@ -13,44 +13,43 @@ function listarContatos()
   $stmt = $conn->query("SELECT * FROM tb_contato");
 
   if ($stmt && $stmt->rowCount() > 0) {
-    echo "<div class='container-contatos'>";
+    echo "<div class='container-contatos row'>";
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "<div class='cartao-contato'>";
+      echo "<div class='cartao-contato col-md-4 mb-4'>";
+      echo "<div class='card'>";
+      echo "<div class='card-header bg-primary text-white'><h5>" . htmlspecialchars($row['nome']) . "</h5></div>";
+      echo "<div class='card-body text-center'>";
 
-      echo "<div class='cabecalho-cartao'><h3>" . htmlspecialchars($row['nome']) . "</h3></div>";
-
-      echo "<div class='corpo-cartao'>";
       $foto = !empty($row['foto']) ? htmlspecialchars($row['foto']) : 'https://cdn-icons-png.freepik.com/512/64/64572.png';
-      echo "<img src='{$foto}' alt='Foto de " . htmlspecialchars($row['nome']) . "' class='imagem-contato'>";
+      echo "<img src='{$foto}' alt='Foto de " . htmlspecialchars($row['nome']) . "' class='rounded-circle mb-3' width='100' height='100'>";
 
-      echo "<div class='informacoes-contato'>";
-      echo "<p><i class='fas fa-user'></i><strong> Login:</strong> " . htmlspecialchars($row['login']) . "</p>";
-      echo "<p><i class='fas fa-lock'></i><strong> Senha:</strong> " . htmlspecialchars($row['senha']) . "</p>";
-      echo "<p><i class='fas fa-envelope'></i><strong> Email:</strong> " . htmlspecialchars($row['email']) . "</p>";
-      echo "<p><i class='fas fa-phone'></i><strong> Telefone:</strong> " . htmlspecialchars($row['telefone']) . "</p>";
+      echo "<p><strong>Login:</strong> " . htmlspecialchars($row['login']) . "</p>";
+      echo "<p><strong>Senha:</strong> " . htmlspecialchars($row['senha']) . "</p>";
+      echo "<p><strong>Email:</strong> " . htmlspecialchars($row['email']) . "</p>";
+      echo "<p><strong>Telefone:</strong> " . htmlspecialchars($row['telefone']) . "</p>";
+
+      echo "</div>";
+      echo "<div class='card-footer d-flex justify-content-between'>";
+      echo "<button class='btn btn-warning botao-editar' 
+                data-id='" . htmlspecialchars($row['id']) . "' 
+                data-nome='" . htmlspecialchars($row['nome']) . "' 
+                data-login='" . htmlspecialchars($row['login']) . "' 
+                data-email='" . htmlspecialchars($row['email']) . "' 
+                data-telefone='" . htmlspecialchars($row['telefone']) . "' 
+                data-senha='" . htmlspecialchars($row['senha']) . "' 
+                data-foto='" . htmlspecialchars($row['foto']) . "'>
+                <i class='fas fa-edit'></i> Editar
+              </button>";
+      echo "<button class='btn btn-danger botao-excluir' data-id='" . htmlspecialchars($row['id']) . "'>
+                <i class='fas fa-trash'></i> Excluir
+              </button>";
       echo "</div>";
       echo "</div>";
-
-      echo "<div class='rodape-cartao'>";
-      echo "<button class='botao-editar'
-              data-id='" . htmlspecialchars($row['id']) . "'
-              data-nome='" . htmlspecialchars($row['nome']) . "'
-              data-login='" . htmlspecialchars($row['login']) . "'
-              data-email='" . htmlspecialchars($row['email']) . "'
-              data-telefone='" . htmlspecialchars($row['telefone']) . "'
-              data-senha='" . htmlspecialchars($row['senha']) . "'
-              data-foto='" . htmlspecialchars($row['foto']) . "'>
-              <i class='fas fa-edit'></i> Editar</button>";
-
-      // >>> IMPORTANTE: incluir data-id no botão excluir
-      echo "<button class='botao-excluir' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-trash'></i> Excluir</button>";
-      echo "</div>";
-
       echo "</div>";
     }
     echo "</div>";
   } else {
-    echo "<p class='sem-contato'>Nenhum contato encontrado.</p>";
+    echo "<p class='text-center text-muted mt-4'>Nenhum contato encontrado.</p>";
   }
 }
 ?>
@@ -60,259 +59,337 @@ function listarContatos()
 <head>
   <meta charset="UTF-8">
   <title>Contatos</title>
-  <link rel="stylesheet" href="contato.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    :root {
+      --cor-primaria: #123d70;
+      --cor-secundaria: #0d2c54;
+      --cor-destaque: #4a86e8;
+      --cor-clara: #FFFAFA;
+      --cor-texto: #333;
+      --cor-texto-claro: #666;
+      --sombra: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transicao: all 0.3s ease;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: "Sora", sans-serif;
+      background-color: #f0f2f5;
+    }
+
+
+    .layout-principal {
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container__barra-lateral {
+      width: 280px;
+      min-height: 100vh;
+      padding: 30px 20px;
+      background: linear-gradient(to bottom, var(--cor-primaria), var(--cor-secundaria));
+      color: var(--cor-clara);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: var(--transicao);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cabecalho-barra-lateral {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .avatar-usuario {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--cor-clara);
+      background-color: var(--cor-clara);
+      margin-bottom: 15px;
+      box-shadow: var(--sombra);
+    }
+
+    .avatar-usuario img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cabecalho-barra-lateral h2 {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 5px;
+      color: var(--cor-clara);
+    }
+
+    .subtitulo {
+      font-size: 14px;
+      opacity: 0.85;
+      text-align: center;
+      color: var(--cor-clara);
+    }
+
+    .menu-barra-lateral {
+      flex-grow: 1;
+      margin-top: 8px;
+    }
+
+    .item-menu {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      color: var(--cor-clara);
+      text-decoration: none;
+      transition: var(--transicao);
+      cursor: pointer;
+    }
+
+    .item-menu i {
+      margin-right: 12px;
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .item-menu:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      text-decoration: none;
+    }
+
+    .item-menu.ativo {
+      background-color: var(--cor-destaque);
+    }
+
+    .rodape-barra-lateral {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .botao-sair {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 12px;
+      background-color: var(--cor-clara);
+      border-radius: 8px;
+      color: var(--cor-primaria);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transicao);
+      box-shadow: var(--sombra);
+    }
+
+    .botao-sair:hover {
+      background-color: #e8e8e8;
+      transform: translateY(-2px);
+    }
+
+    .botao-sair i {
+      margin-right: 8px;
+    }
+
+    .container__formulario {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .cartao-contato .card {
+      box-shadow: var(--sombra);
+      border-radius: 12px;
+    }
+
+    .cartao-contato .card-header {
+      font-weight: 600;
+    }
+
+    .cartao-contato img {
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .modal-img-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: auto;
+    }
+
+    .invalid-feedback {
+      display: block;
+    }
+  </style>
 </head>
 
 <body>
-  <main>
+  <div class="layout-principal">
     <aside class="container__barra-lateral">
       <div class="cabecalho-barra-lateral">
         <div class="avatar-usuario">
           <img
-            src="<?php echo !empty($usuario['foto']) ? htmlspecialchars($usuario['foto']) : 'https://via.placeholder.com/150'; ?>"
+            src="<?php echo !empty($usuario['foto']) ? htmlspecialchars($usuario['foto']) : 'https://cdn-icons-png.freepik.com/512/64/64572.png'; ?>"
             alt="Foto do usuário">
         </div>
-        <div>
-          <h2><?php echo htmlspecialchars($usuario['nome']); ?></h2>
-          <p class="subtitulo">Lumiere</p>
-        </div>
+        <h2><?php echo htmlspecialchars($usuario['nome']); ?></h2>
+        <p class="subtitulo">Lumiere</p>
       </div>
-
       <nav class="menu-barra-lateral">
-        <a href="home.php" class="item-menu">
-          <i class="fas fa-home"></i>
-          <span>Início</span>
+        <a href="home.php" class="item-menu d-flex align-items-center">
+          <i class="fas fa-home"></i><span>Início</span>
         </a>
-        <a href="#" class="item-menu ativo">
-          <i class="fas fa-user-circle"></i>
-          <span>Contatos</span>
+        <a href="#" class="item-menu ativo d-flex align-items-center">
+          <i class="fas fa-user-circle"></i><span>Contatos</span>
         </a>
       </nav>
-
       <div class="rodape-barra-lateral">
-        <a href="logout.php" class="botao-sair">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Sair</span>
+        <a href="logout.php" class="botao-sair d-flex align-items-center justify-content-center">
+          <i class="fas fa-sign-out-alt"></i> Sair
         </a>
       </div>
     </aside>
 
-    <section class="container__formulario">
-      <div class="cabecalho-pagina">
+    <main class="container__formulario">
+      <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Contatos</h1>
-        <button class="botao-adicionar">Adicionar Contato</button>
+        <button class="btn btn-primary" id="botaoAdicionar"><i class="fas fa-plus"></i> Adicionar Contato</button>
       </div>
-
-      <p class="texto-boas-vindas">Gerencie os contatos</p>
-
       <?php listarContatos(); ?>
-    </section>
-  </main>
+    </main>
+  </div>
 
-  <div id="modal" class="modal" style="display: none;">
-    <div class="modal-conteudo">
-
-      <div class="modal-cabecalho">
-        <h2 class="modal-titulo">Adicionar Contato</h2>
-        <!-- manter o onclick, mas a função estará GLOBAL -->
-        <button class="btn-fechar" onclick="fecharModal()">&times;</button>
-      </div>
-
-      <div class="modal-corpo">
-
-        <form id="formContato" class="form" enctype="multipart/form-data">
-          <div class="foto">
-            <label for="imagemInput" class="fotoLabel">
-              <div id="imagemPreview" class="foto-icon">
-                <i class="fas fa-plus"></i>
+  <div class="modal fade" id="modalContato" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Adicionar Contato</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formContato" enctype="multipart/form-data">
+            <div class="text-center mb-3">
+              <img id="imagemPreview" src="" alt="Preview" class="modal-img-preview mb-2" style="display:none;">
+              <input type="file" id="imagemInput" accept="image/*" class="form-control mb-2">
+              <small id="fotoTexto" class="text-muted">Clique para adicionar uma foto</small>
+            </div>
+            <div class="mb-3">
+              <label>Nome</label>
+              <input type="text" class="form-control" id="nome">
+              <div class="invalid-feedback" id="erroNome"></div>
+            </div>
+            <div class="mb-3">
+              <label>Login</label>
+              <input type="text" class="form-control" id="login">
+              <div class="invalid-feedback" id="erroLogin"></div>
+            </div>
+            <div class="mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control" id="email">
+              <div class="invalid-feedback" id="erroEmail"></div>
+            </div>
+            <div class="mb-3">
+              <label>Telefone</label>
+              <input type="text" class="form-control" id="telefone">
+              <div class="invalid-feedback" id="erroTelefone"></div>
+            </div>
+            <div class="mb-3">
+              <label>Senha</label>
+              <input type="password" class="form-control" id="senha">
+              <div class="invalid-feedback" id="erroSenha"></div>
+              <div class="progress mt-1">
+                <div id="barraForcaSenha" class="progress-bar" style="width:0%;"></div>
               </div>
-            </label>
-           <input type="file" id="imagemInput" name="campo6" accept="image/*" style="display: none;">
-            <p class="foto-texto">Clique para adicionar uma foto</p>
-          </div>
-
-          <div class="caixaInputs">
-            <div class="linha">
-              <label>Nome
-                <div class="input-container">
-                  <i class="fas fa-user"></i>
-                  <input type="text" placeholder="Digite seu nome" id="nome" required>
-                </div>
-                <span class="erro" id="erroNome"></span>
-              </label>
-
-              <label>Login
-                <div class="input-container">
-                  <i class="fas fa-id-badge"></i>
-                  <input type="text" placeholder="Digite seu login" id="login" required>
-                </div>
-                <span class="erro" id="erroLogin"></span>
-              </label>
             </div>
-
-            <div class="linha">
-              <label>E-mail
-                <div class="input-container">
-                  <i class="fas fa-envelope"></i>
-                  <input type="email" placeholder="Digite seu e-mail" id="email" required>
-                </div>
-                <span class="erro" id="erroEmail"></span>
-              </label>
-
-              <label>Telefone
-                <div class="input-container">
-                  <i class="fas fa-phone"></i>
-                  <input type="tel" placeholder="(00) 00000-0000" id="telefone" required>
-                </div>
-                <span class="erro" id="erroTelefone"></span>
-              </label>
+            <div class="mb-3">
+              <label>Confirmar Senha</label>
+              <input type="password" class="form-control" id="confirmarSenha">
+              <div class="invalid-feedback" id="erroConfirmarSenha"></div>
+              <div class="progress mt-1">
+                <div id="barraForcaConfirmar" class="progress-bar" style="width:0%;"></div>
+              </div>
             </div>
-
-            <div class="linha">
-              <label>Senha
-                <div class="senha-container input-container">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" placeholder="Digite sua senha" id="senha" required>
-                  <span class="mostrarSenha"><i class="fas fa-eye"></i></span>
-                </div>
-                <span class="erro" id="erroSenha"></span>
-                <div class="forca-senha">
-                  <div id="barraForcaSenha" class="barra"></div>
-                </div>
-              </label>
-
-              <label>Confirmar senha
-                <div class="senha-container input-container">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" placeholder="Confirme sua senha" id="confirmarSenha" required>
-                  <span class="mostrarSenha"><i class="fas fa-eye"></i></span>
-                </div>
-                <span class="erro" id="erroConfirmarSenha"></span>
-                <div class="forca-senha">
-                  <div id="barraForcaConfirmar" class="barra"></div>
-                </div>
-              </label>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="botaoSalvar"><i class="fas fa-save"></i> Salvar</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
+        </div>
       </div>
-
-      <div class="modal-rodape">
-        <button class="botao-primario" id="botaoSalvar">
-          <i class="fas fa-save"></i> Salvar
-        </button>
-        <button class="botao-excluir" id="botaoCancelar">
-          <i class="fas fa-times"></i> Cancelar
-        </button>
-      </div>
-
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    function abrirModal() {
-      $('#modal').css('display', 'flex');
-    }
-    function fecharModal() {
-      $('#modal').css('display', 'none');
-    }
-
     $(document).ready(function () {
-      $('.item-menu').on('click', function () {
-        $('.item-menu').removeClass('ativo');
-        $(this).addClass('ativo');
-      });
-
       let editandoId = null;
+      const modal = new bootstrap.Modal(document.getElementById('modalContato'));
 
-      $('.botao-adicionar').on('click', function (e) {
-        e.preventDefault();
-        $('.modal-titulo').text("Adicionar Contato");
-        $('#formContato')[0].reset();
-        $('#imagemPreview').html('<i class="fas fa-plus"></i>');
-        $('#imagemPreview').removeClass('with-image');
-        $('.foto-texto').text('Clique para adicionar uma foto');
+      $("#botaoAdicionar").click(function () {
         editandoId = null;
-        abrirModal();
+        $("#formContato")[0].reset();
+        $("#imagemPreview").hide();
+        $("#fotoTexto").text("Clique para adicionar uma foto");
+        $(".modal-title").text("Adicionar Contato");
+        modal.show();
       });
-
-      $('.btn-fechar, #botaoCancelar').on('click', fecharModal);
 
       $(document).on('click', '.botao-editar', function () {
-        $('.modal-titulo').text("Editar Contato");
-
         editandoId = $(this).data('id');
-
-        $('#nome').val($(this).data('nome'));
-        $('#login').val($(this).data('login'));
-        $('#email').val($(this).data('email'));
-        $('#telefone').val($(this).data('telefone'));
-        $('#senha').val($(this).data('senha'));
-        $('#confirmarSenha').val($(this).data('senha'));
+        $(".modal-title").text("Editar Contato");
+        $("#nome").val($(this).data('nome'));
+        $("#login").val($(this).data('login'));
+        $("#email").val($(this).data('email'));
+        $("#telefone").val($(this).data('telefone'));
+        $("#senha").val($(this).data('senha'));
+        $("#confirmarSenha").val($(this).data('senha'));
 
         const foto = $(this).data('foto');
         if (foto) {
-          $('#imagemPreview').html('<img src="' + foto + '" alt="Preview da foto">');
-          $('#imagemPreview').addClass('with-image');
-          $('.foto-texto').text('Foto carregada');
+          $("#imagemPreview").attr("src", foto).show();
+          $("#fotoTexto").text("Foto carregada");
         } else {
-          $('#imagemPreview').html('<i class="fas fa-plus"></i>').removeClass('with-image');
-          $('.foto-texto').text('Clique para adicionar uma foto');
+          $("#imagemPreview").hide();
+          $("#fotoTexto").text("Clique para adicionar uma foto");
         }
-
-        abrirModal();
+        modal.show();
       });
-
 
       $(document).on('click', '.botao-excluir', function () {
         const id = $(this).data('id');
-        if (!id) {
-          alert("ID do contato não encontrado.");
-          return;
-        }
         if (confirm("Deseja realmente excluir este contato?")) {
-          $.ajax({
-            url: "excluir.php",
-            type: "POST",
-            data: { campo0: id },
-            dataType: "html"
-          }).done(function (resp) {
-            location.reload();
-          }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("Request failed: " + textStatus + " - " + errorThrown);
-            alert("Erro ao excluir contato. Tente novamente.");
-          });
+          $.post("excluir.php", { campo0: id }, function () { location.reload(); });
         }
       });
 
       $("#imagemInput").change(function () {
         if (this.files && this.files[0]) {
-          var reader = new FileReader();
+          const reader = new FileReader();
           reader.onload = function (e) {
-            $('#imagemPreview').html('<img src="' + e.target.result + '" alt="Preview da foto">');
-            $('#imagemPreview').addClass('with-image');
-            $('.foto-texto').text('Foto adicionada com sucesso!');
+            $("#imagemPreview").attr("src", e.target.result).show();
+            $("#fotoTexto").text("Foto adicionada com sucesso!");
           }
           reader.readAsDataURL(this.files[0]);
         }
       });
 
-      // Mostrar/ocultar senha
-      $(".mostrarSenha").click(function () {
-        const input = $(this).siblings("input");
-        const icon = $(this).find("i");
-        if (input.attr("type") === "password") {
-          input.attr("type", "text");
-          icon.removeClass("fa-eye").addClass("fa-eye-slash");
-        } else {
-          input.attr("type", "password");
-          icon.removeClass("fa-eye-slash").addClass("fa-eye");
-        }
-      });
-
-      // Força da senha
       function calcularForca(senha) {
         let forca = 0;
         if (senha.length >= 8) forca += 20;
@@ -324,68 +401,46 @@ function listarContatos()
       }
 
       function atualizarBarra(barra, forca) {
-        barra.css("width", forca + "%");
-        if (forca < 40) barra.css("background-color", "red");
-        else if (forca < 80) barra.css("background-color", "orange");
-        else barra.css("background-color", "green");
+        barra.width(forca + "%");
+        barra.removeClass("bg-danger bg-warning bg-success");
+        if (forca < 40) barra.addClass("bg-danger");
+        else if (forca < 80) barra.addClass("bg-warning");
+        else barra.addClass("bg-success");
       }
 
-      $("#senha").on("input", function () {
-        const senha = $(this).val();
-        atualizarBarra($("#barraForcaSenha"), calcularForca(senha));
-      });
+      $("#senha").on("input", function () { atualizarBarra($("#barraForcaSenha"), calcularForca($(this).val())); });
+      $("#confirmarSenha").on("input", function () { atualizarBarra($("#barraForcaConfirmar"), calcularForca($(this).val())); });
 
-      $("#confirmarSenha").on("input", function () {
-        const senha = $(this).val();
-        atualizarBarra($("#barraForcaConfirmar"), calcularForca(senha));
-      });
-
-      // Máscara de telefone simples
       $("#telefone").on("input", function () {
-        let value = $(this).val().replace(/\D/g, '');
-        if (value.length > 2) {
-          value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
-        }
-        if (value.length > 10) {
-          value = `${value.substring(0, 10)}-${value.substring(10, 14)}`;
-        }
-        $(this).val(value);
+        let v = $(this).val().replace(/\D/g, '');
+        if (v.length > 2) v = `(${v.substring(0, 2)}) ${v.substring(2)}`;
+        if (v.length > 10) v = `${v.substring(0, 10)}-${v.substring(10, 14)}`;
+        $(this).val(v);
       });
 
       function validarFormulario() {
         let valido = true;
-        $(".erro").text("");
+        $(".form-control").removeClass("is-invalid");
 
         const nome = $("#nome").val().trim();
-        if (nome === "") {
-          $("#erroNome").text("Por favor, insira seu nome.");
-          valido = false;
-        }
+        if (!nome) { $("#nome").addClass("is-invalid"); $("#erroNome").text("Por favor, insira seu nome."); valido = false; }
 
         const login = $("#login").val().trim();
-        if (login === "") {
-          $("#erroLogin").text("Por favor, insira seu login.");
-          valido = false;
-        }
+        if (!login) { $("#login").addClass("is-invalid"); $("#erroLogin").text("Por favor, insira seu login."); valido = false; }
 
         const email = $("#email").val().trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          $("#erroEmail").text("E-mail inválido.");
-          valido = false;
-        }
+        if (!emailRegex.test(email)) { $("#email").addClass("is-invalid"); $("#erroEmail").text("E-mail inválido."); valido = false; }
 
         const telefone = $("#telefone").val().replace(/\D/g, '');
-        if (telefone.length < 10) {
-          $("#erroTelefone").text("Telefone inválido.");
-          valido = false;
-        }
+        if (telefone.length < 10) { $("#telefone").addClass("is-invalid"); $("#erroTelefone").text("Telefone inválido."); valido = false; }
 
         const senha = $("#senha").val();
-        const confirmarSenha = $("#confirmarSenha").val();
-        if (senha !== confirmarSenha || senha.length === 0) {
-          $("#erroConfirmarSenha").text("As senhas não coincidem ou estão vazias.");
+        const confirmar = $("#confirmarSenha").val();
+        if (senha !== confirmar || senha.length === 0) {
+          $("#senha,#confirmarSenha").addClass("is-invalid");
           $("#erroSenha").text("As senhas não coincidem ou estão vazias.");
+          $("#erroConfirmarSenha").text("As senhas não coincidem ou estão vazias.");
           valido = false;
         }
 
@@ -394,7 +449,6 @@ function listarContatos()
 
       $("#botaoSalvar").click(function (e) {
         e.preventDefault();
-
         if (validarFormulario()) {
           const formData = new FormData();
           formData.append("campo0", editandoId);
@@ -403,38 +457,20 @@ function listarContatos()
           formData.append("campo3", $("#senha").val());
           formData.append("campo4", $("#email").val());
           formData.append("campo5", $("#telefone").val());
-
-          // pega a imagem escolhida
-          if ($("#imagemInput")[0].files.length > 0) {
-            formData.append("campo6", $("#imagemInput")[0].files[0]);
-          }
-
-          // se estiver editando, manda a foto atual
-          if (editandoId) {
-            formData.append("foto_atual", $("#imagemPreview img").attr("src") || "");
-          }
-
-          let url = editandoId ? "editar.php" : "cadastro.php";
+          if ($("#imagemInput")[0].files.length > 0) formData.append("campo6", $("#imagemInput")[0].files[0]);
+          if (editandoId) formData.append("foto_atual", $("#imagemPreview").attr("src") || "");
 
           $.ajax({
-            url: url,
+            url: editandoId ? "editar.php" : "cadastro.php",
             type: "POST",
             data: formData,
             processData: false,
             contentType: false,
-            success: function (response) {
-              console.log(response);
-              fecharModal();
-              location.reload();
-            },
-            error: function (xhr, status, error) {
-              console.error("Erro: " + error);
-              alert("Erro ao salvar o contato.");
-            }
+            success: function () { modal.hide(); location.reload(); },
+            error: function () { alert("Erro ao salvar o contato."); }
           });
         }
       });
-
     });
   </script>
 </body>
